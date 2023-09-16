@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Question Generator</title>
+</head>
+<body>
+    <h1>Trivia Question Generator</h1>
+    <button id="generate-button">Generate Questions</button>
+    <div id="questions-container"></div>
+
+    <script>
+
+        const _question = document.getElementById('generate-button');
+        const _options = document.querySelectorAll('questions-container');
+
+
+        async function loadQuestion(){
+        
+                // Replace 'YOUR_API_URL' with the actual API URL
+                const apiUrl = 'https://opentdb.com/api.php?amount=10&category=9&difficulty=hard&type=multipleOUR_API_URL';
+
+                // Fetch trivia questions from the API
+                const response = await fetch(`${apiUrl}`);
+                const data = await response.json();
+            //console.log(data.results[0]);
+              showQuestion(data.results[0])
+        };
+        function showQuestion(data){
+            let correctAnswer = data.correct_answers;
+            let incorrectAnswer = data.incorrect_answers;
+            let _optionsList = incorrectAnswer;
+
+            _optionsList.splice(math.floor(math.random() * (incorrectAnswer.lenght + 1)), 0, correctAnswer);
+            console.log(_optionsList);
+            console.log(correctAnswer);
+        }
+
+       loadQuestion();
+
+        function displayQuestions(questions) {
+            const questionsContainer = document.getElementById('questions-container');
+            questionsContainer.innerHTML = ''; // Clear previous content
+
+            questions.forEach((question, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.innerHTML = `<strong>Question ${index + 1}:</strong> ${question.question}<br>`;
+                
+                // Display answer choices
+                question.incorrect_answers.forEach((choice) => {
+                    questionElement.innerHTML += `<input type="radio" name="question${index}" value="${choice}"> ${choice}<br>`;
+                });
+                questionElement.innerHTML += `<input type="radio" name="question${index}" value="${question.correct_answer}"> ${question.correct_answer}<br>`;
+
+                questionsContainer.appendChild(questionElement);
+            });
+        }
+    </script>
+</body>
+</html>
